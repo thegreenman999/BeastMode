@@ -2,6 +2,7 @@ package me.thegreenman.beastmode.commands;
 
 import java.util.*;
 
+import me.thegreenman.Main;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -164,7 +165,7 @@ public class StartMenu implements CommandExecutor, Listener {
 
         menu.addItem(createToggleItem("Spawn mob", Material.ZOMBIE_SPAWN_EGG, BeastModeData.SpawnMobs));
         menu.addItem(createToggleItem(Component.text("§fAnnounce Advancements"), Material.KNOWLEDGE_BOOK, BeastModeData.AnnounceAdvancements));
-        menu.addItem(createDifficultyItem("Difficulty", Difficulty.HARD));
+        menu.addItem(createDifficultyItem(Component.text("§fDifficulty"), WORLD.getDifficulty()));
 
         menu.setItem(35, back);
 
@@ -235,10 +236,10 @@ public class StartMenu implements CommandExecutor, Listener {
     }
 
 
-	public static ItemStack createDifficultyItem(String name, Difficulty difficulty) {
+	public static ItemStack createDifficultyItem(Component name, Difficulty difficulty) {
 		ItemStack item = new ItemStack(Material.WITHER_SKELETON_SKULL);
 		ItemMeta meta = item.getItemMeta();
-		meta.setItemName(name);
+		meta.itemName(name);
 		meta.setLore(Arrays.asList(
 				ChatColor.GRAY + "Current Mode: " + ChatColor.AQUA + difficulty.name(),
 				ChatColor.GRAY + "Click to cycle through difficulty"
@@ -338,7 +339,7 @@ public class StartMenu implements CommandExecutor, Listener {
                 break;
             case "Keep TNTBow when death":
                 BeastModeData.TNTBowKeepOnDeath = !BeastModeData.TNTBowKeepOnDeath;
-
+                break;
             case "Selected map":
                 cycleMap();
                 break;
@@ -357,7 +358,7 @@ public class StartMenu implements CommandExecutor, Listener {
             case "§fAnnounce Advancements":
                 BeastModeData.AnnounceAdvancements = !BeastModeData.AnnounceAdvancements;
                 break;
-            case "Difficulty":
+            case "§fDifficulty":
                 cycleDifficulty();
                 WORLD.setDifficulty(BeastModeData.Difficulty);
                 break;
@@ -558,11 +559,18 @@ public class StartMenu implements CommandExecutor, Listener {
 	}
 
     public void cycleDifficulty() {
-        int DifficultyIndex = BeastModeData.Difficulty.getValue() + 1;
+        List<Difficulty> difficulties = List.of(
+                Difficulty.EASY,
+                Difficulty.NORMAL,
+                Difficulty.HARD
+        );
+
+        int DifficultyIndex = difficulties.indexOf(BeastModeData.Difficulty) + 1;
         if (DifficultyIndex >= 3) {
             DifficultyIndex = 0;
         }
-        BeastModeData.Difficulty = Difficulty.getByValue(DifficultyIndex);
+
+        BeastModeData.Difficulty = difficulties.get(DifficultyIndex);
     }
 
     public void cycleMap() {
