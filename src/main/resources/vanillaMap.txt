@@ -1,0 +1,106 @@
+villagerBowLocation:
+  grön:
+    x:
+    y:
+    z:
+  röd:
+    x:
+    y:
+    z:
+  blå:
+    x:
+    y:
+    z:
+  rosa:
+    x:
+    y:
+    z:
+villagerSwordLocation:
+  grön:
+    x:
+    y:
+    z:
+  röd:
+    x:
+    y:
+    z:
+  blå:
+    x:
+    y:
+    z:
+  rosa:
+    x:
+    y:
+    z:
+villagerArmorLocation:
+  grön:
+    x:
+    y:
+    z:
+  röd:
+    x:
+    y:
+    z:
+  blå:
+    x:
+    y:
+    z:
+  rosa:
+    x:
+    y:
+    z:
+villagerFoodLocation:
+  grön:
+    x:
+    y:
+    z:
+  röd:
+    x:
+    y:
+    z:
+  blå:
+    x:
+    y:
+    z:
+  rosa:
+    x:
+    y:
+    z:
+villagerBlocksLocation:
+  grön:
+    x:
+    y:
+    z:
+  röd:
+    x:
+    y:
+    z:
+  blå:
+    x:
+    y:
+    z:
+  rosa:
+    x:
+    y:
+    z:
+villagerPotionLocation:
+  grön:
+    x:
+    y:
+    z:
+  röd:
+    x:
+    y:
+    z:
+  blå:
+    x:
+    y:
+    z:
+  rosa:
+    x:
+    y:
+    z:
+villagerMiddleLocation:
+  x: -1.5
+  y: 47
+  z: -1.5
