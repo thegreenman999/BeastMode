@@ -165,6 +165,11 @@ public class BeastModeData {
     public static boolean SpawnMobs = false;
     public static boolean AnnounceAdvancements = false;
     public static Difficulty Difficulty = org.bukkit.Difficulty.HARD;
+    public static boolean FallDamage = true;
+    public static boolean FireDamage = true;
+    public static boolean KeepInventory = false;
+    public static boolean Locatorbar = false;
+    public static boolean NaturalRegeneration = true;
 
 
     // TNT Bow

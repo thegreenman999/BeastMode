@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+@SuppressWarnings("deprecation")
 public class MinkenMenu implements CommandExecutor, Listener {
 	private boolean toolsUnbreakable = true;
 	private boolean armorUnbreakable = true;

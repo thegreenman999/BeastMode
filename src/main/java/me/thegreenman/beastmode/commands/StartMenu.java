@@ -23,9 +23,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import me.thegreenman.beastmode.BeastModeData;
 import me.thegreenman.beastmode.StartGame;
+import org.jetbrains.annotations.NotNull;
 
 import static me.thegreenman.Main.*;
 
+@SuppressWarnings("deprecation")
 public class StartMenu implements CommandExecutor, Listener {
 	public static Random random = new Random();
 
@@ -83,21 +85,18 @@ public class StartMenu implements CommandExecutor, Listener {
     }};
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (!(sender instanceof Player)) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+		if (!(sender instanceof Player player)) {
 			sender.sendMessage("[Server] Nope, players only.");
 			return false;
 		}
 
 
-		Player player = ((Player) sender).getPlayer();
-
-
-		if (Bukkit.getWorld("world").isAutoSave()) {
-            Bukkit.getWorld("world").setAutoSave(false);
+		if (WORLD.isAutoSave()) {
+            WORLD.setAutoSave(false);
         }
 
-		if (BeastModeData.gameIsRunning == true) {
+		if (BeastModeData.gameIsRunning) {
             Bukkit.broadcastMessage("[Server] Spelet körs redan.");
             return false;
         }
@@ -166,6 +165,11 @@ public class StartMenu implements CommandExecutor, Listener {
         menu.addItem(createToggleItem("Spawn mob", Material.ZOMBIE_SPAWN_EGG, BeastModeData.SpawnMobs));
         menu.addItem(createToggleItem(Component.text("§fAnnounce Advancements"), Material.KNOWLEDGE_BOOK, BeastModeData.AnnounceAdvancements));
         menu.addItem(createDifficultyItem(Component.text("§fDifficulty"), WORLD.getDifficulty()));
+        menu.addItem(createToggleItem(Component.text("Fall Damage"), Material.IRON_BOOTS, BeastModeData.FallDamage));
+        menu.addItem(createToggleItem(Component.text("Fire Damage"), Material.FLINT_AND_STEEL, BeastModeData.FireDamage));
+        menu.addItem(createToggleItem(Component.text("Keep Inventory"), Material.ENDER_CHEST, BeastModeData.KeepInventory));
+        menu.addItem(createToggleItem(Component.text("Locatorbar"), Material.COMPASS, BeastModeData.Locatorbar));
+        menu.addItem(createToggleItem(Component.text("Natural Regeneration"), Material.APPLE, BeastModeData.NaturalRegeneration));
 
         menu.setItem(35, back);
 
@@ -259,7 +263,7 @@ public class StartMenu implements CommandExecutor, Listener {
 		ItemStack clicked = event.getCurrentItem();
 		if (clicked == null || !clicked.hasItemMeta()) return;
 
-		String displayName = clicked.getItemMeta().getItemName().toString();
+		String displayName = clicked.getItemMeta().getItemName();
 		switch (displayName) {
 
             case "Minken Edition Rules":
@@ -362,6 +366,21 @@ public class StartMenu implements CommandExecutor, Listener {
                 cycleDifficulty();
                 WORLD.setDifficulty(BeastModeData.Difficulty);
                 break;
+            case "Fall Damage":
+                BeastModeData.FallDamage = !BeastModeData.FallDamage;
+                break;
+            case "Fire Damage":
+                BeastModeData.FireDamage = !BeastModeData.FireDamage;
+                break;
+            case "Keep Inventory":
+                BeastModeData.KeepInventory = !BeastModeData.KeepInventory;
+                break;
+            case "Locatorbar":
+                BeastModeData.Locatorbar = !BeastModeData.Locatorbar;
+                break;
+            case "Natural Regeneration":
+                BeastModeData.NaturalRegeneration = !BeastModeData.NaturalRegeneration;
+                break;
 
             case "§fBack":
                 player.closeInventory();
@@ -400,7 +419,7 @@ public class StartMenu implements CommandExecutor, Listener {
 		switch (settingName) {
             case "Shield price (dia)":
                 if ((increase && BeastModeData.diaForShield < 20) || (!increase && BeastModeData.diaForShield > 1)) {
-                    if (shift) {
+                    if (shift && ((increase && BeastModeData.diaForShield < 10) || (!increase && BeastModeData.diaForShield > 10))) {
                         BeastModeData.diaForShield += increase ? 10 : -10;
                     }
                     else {
@@ -410,7 +429,7 @@ public class StartMenu implements CommandExecutor, Listener {
                 break;
             case "WaterBucket price":
                 if ((increase && BeastModeData.diaForWaterBucket < 20) || (!increase && BeastModeData.diaForWaterBucket > 1)) {
-                    if (shift) {
+                    if (shift && ((increase && BeastModeData.diaForWaterBucket < 10) || (!increase && BeastModeData.diaForWaterBucket > 10))) {
                         BeastModeData.diaForWaterBucket += increase ? 10 : -10;
                     }
                     else {
@@ -420,7 +439,7 @@ public class StartMenu implements CommandExecutor, Listener {
                 break;
             case "Enchanted Golden Apple price":
                 if ((increase && BeastModeData.diaForSuperGoldenApple < 20) || (!increase && BeastModeData.diaForSuperGoldenApple > 1)) {
-                    if (shift) {
+                    if (shift && ((increase && BeastModeData.diaForSuperGoldenApple < 10) || (!increase && BeastModeData.diaForSuperGoldenApple > 10))) {
                         BeastModeData.diaForSuperGoldenApple += increase ? 10 : -10;
                     }
                     else {
@@ -430,7 +449,7 @@ public class StartMenu implements CommandExecutor, Listener {
                 break;
             case "EnderPearl price":
                 if ((increase && BeastModeData.diaForEnderPearl < 20) || (!increase && BeastModeData.diaForEnderPearl > 1)) {
-                    if (shift) {
+                    if (shift && ((increase && BeastModeData.diaForEnderPearl < 10) || (!increase && BeastModeData.diaForEnderPearl > 10))) {
                         BeastModeData.diaForEnderPearl += increase ? 10 : -10;
                     }
                     else {
@@ -440,7 +459,7 @@ public class StartMenu implements CommandExecutor, Listener {
                 break;
             case "AddeBow price":
                 if ((increase && BeastModeData.diaForAddeBow < 20) || (!increase && BeastModeData.diaForAddeBow > 1)) {
-                    if (shift) {
+                    if (shift && ((increase && BeastModeData.diaForAddeBow < 10) || (!increase && BeastModeData.diaForAddeBow > 10))) {
                         BeastModeData.diaForAddeBow += increase ? 10 : -10;
                     }
                     else {
@@ -451,7 +470,7 @@ public class StartMenu implements CommandExecutor, Listener {
 
             case "Golds for 1 Dia":
                 if ((increase && BeastModeData.goldsForOneDia < 20) || (!increase && BeastModeData.goldsForOneDia > 1)) {
-                    if (shift) {
+                    if (shift && ((increase && BeastModeData.goldsForOneDia < 10) || (!increase && BeastModeData.goldsForOneDia > 10))) {
                         BeastModeData.goldsForOneDia += increase ? 10 : -10;
                     }
                     else {
@@ -461,7 +480,7 @@ public class StartMenu implements CommandExecutor, Listener {
                 break;
             case "Mace price":
                 if ((increase && BeastModeData.diaForMace < 20) || (!increase && BeastModeData.diaForMace > 1)) {
-                    if (shift) {
+                    if (shift && ((increase && BeastModeData.diaForMace < 10) || (!increase && BeastModeData.diaForMace > 10))) {
                         BeastModeData.diaForMace += increase ? 10 : -10;
                     }
                     else {
@@ -471,7 +490,7 @@ public class StartMenu implements CommandExecutor, Listener {
                 break;
             case "Wind Charge price (gold)":
                 if ((increase && BeastModeData.goldForWindCharge < 20) || (!increase && BeastModeData.goldForWindCharge > 1)) {
-                    if (shift) {
+                    if (shift && ((increase && BeastModeData.goldForWindCharge < 10) || (!increase && BeastModeData.goldForWindCharge > 10))) {
                         BeastModeData.goldForWindCharge += increase ? 10 : -10;
                     }
                     else {
@@ -482,7 +501,7 @@ public class StartMenu implements CommandExecutor, Listener {
 
             case "Start HP":
                 if ((increase && BeastModeData.startHP < 20) || (!increase && BeastModeData.startHP > 1)) {
-                    if (shift) {
+                    if (shift && ((increase && BeastModeData.startHP < 10) || (!increase && BeastModeData.startHP > 10))) {
                         BeastModeData.startHP += increase ? 10 : -10;
                     }
                     else {
@@ -492,7 +511,7 @@ public class StartMenu implements CommandExecutor, Listener {
                 break;
             case "Start foodlevel":
                 if ((increase && BeastModeData.startFoodlevel < 20) || (!increase && BeastModeData.startFoodlevel > 0)) {
-                    if (shift && ((increase && BeastModeData.startFoodlevel < 10) || (!increase && BeastModeData.startFoodlevel > 10))) {
+                    if (shift && ((increase && BeastModeData.startFoodlevel < 10) || (!increase && BeastModeData.startFoodlevel > 9))) {
                         BeastModeData.startFoodlevel += increase ? 10 : -10;
                     }
                     else {
@@ -524,7 +543,7 @@ public class StartMenu implements CommandExecutor, Listener {
                 break;
             case "Fuse Time":
                 if ((increase && BeastModeData.TNTBowfuseTime < 180) || (!increase && BeastModeData.TNTBowfuseTime > 0)) {
-                    if (shift) {
+                    if (shift && ((increase && BeastModeData.TNTBowfuseTime < 170) || (!increase && BeastModeData.TNTBowfuseTime > 9))) {
                         BeastModeData.TNTBowfuseTime += increase ? 10 : -10;
                     }
                     else {
@@ -534,8 +553,8 @@ public class StartMenu implements CommandExecutor, Listener {
                 }
                 break;
             case "Cooldown":
-                if ((increase && BeastModeData.TNTBowCoolDown < 180) || (!increase && BeastModeData.TNTBowCoolDown > 1)) {
-                    if (shift) {
+                if ((increase && BeastModeData.TNTBowCoolDown < 180) || (!increase && BeastModeData.TNTBowCoolDown > 0)) {
+                    if (shift && ((increase && BeastModeData.TNTBowCoolDown < 170) || (!increase && BeastModeData.TNTBowCoolDown > 9))) {
                         BeastModeData.TNTBowCoolDown += increase ? 10 : -10;
                     }
                     else {
@@ -546,7 +565,7 @@ public class StartMenu implements CommandExecutor, Listener {
                 break;
             case "Max Damage":
                 if ((increase && BeastModeData.TNTBowMaxDamage < 100) || (!increase && BeastModeData.TNTBowMaxDamage > 0)) {
-                    if (shift) {
+                    if (shift && ((increase && BeastModeData.TNTBowMaxDamage < 90) || (!increase && BeastModeData.TNTBowMaxDamage > 9))) {
                         BeastModeData.TNTBowMaxDamage += increase ? 10 : -10;
                     }
                     else {

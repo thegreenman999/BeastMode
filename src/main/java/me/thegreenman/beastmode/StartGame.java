@@ -24,7 +24,9 @@ public class StartGame {
 
         countdown = BeastModeData.countdown;
 
-        TntBow.setCoolDowntime(BeastModeData.TNTBowCoolDown);
+        if (BeastModeData.TNTBowCoolDown != 0) {
+            TntBow.setCoolDowntime(BeastModeData.TNTBowCoolDown);
+        }
 
         new BukkitRunnable() {
             @Override

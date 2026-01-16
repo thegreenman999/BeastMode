@@ -124,7 +124,6 @@ public class Main extends JavaPlugin implements Listener {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				// AS DEFAULT: advance_time = false  |  advance_weather = false  |  ...fall_damage ? // TODO: Fixa menyalternativ i /start?
 				Main.log("Setting GameRule LOCATOR_BAR to FALSE.");
 				WORLD.setGameRule(GameRule.LOCATOR_BAR, false);
 				Main.log("Setting Difficulty to HARD.");
