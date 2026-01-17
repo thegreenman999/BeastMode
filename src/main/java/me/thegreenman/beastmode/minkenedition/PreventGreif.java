@@ -2,7 +2,10 @@ package me.thegreenman.beastmode.minkenedition;
 
 import java.util.Iterator;
 
+import me.thegreenman.Main;
+import me.thegreenman.beastmode.BeastModeData;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -21,8 +24,15 @@ public class PreventGreif implements Listener {
 
 	@EventHandler
 	public void onPlayerInteractEvent(PlayerInteractEvent event) {
-		if (!event.getAction().equals(Action.LEFT_CLICK_BLOCK)) { return; }
-		if (event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) { return; }
+		if (!event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+            return;
+        }
+		if (event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+            return;
+        }
+        if (BeastModeData.selectedMapindex != 0) {
+            return;
+        }
 
 		Block clickedBlock = event.getClickedBlock();
 
@@ -54,6 +64,9 @@ public class PreventGreif implements Listener {
 	
 	@EventHandler
     public void onEntityExplode(EntityExplodeEvent event) { //  GRÖNIS EDITION
+        if (BeastModeData.selectedMapindex != 0) {
+            return;
+        }
         // Go through all the blocks that would be destroyed and remove the unauthorized ones
         Iterator<Block> it = event.blockList().iterator();
         while (it.hasNext()) {
@@ -67,6 +80,9 @@ public class PreventGreif implements Listener {
 
     @EventHandler
     public void onBlockExplodeEvent(BlockExplodeEvent event) { //  GRÖNIS EDITION
+        if (BeastModeData.selectedMapindex != 0) {
+            return;
+        }
         // Go through all the blocks that would be destroyed and remove the unauthorized ones
         Iterator<Block> it = event.blockList().iterator();
         while (it.hasNext()) {

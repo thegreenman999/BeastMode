@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.TNTPrimeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -104,6 +105,7 @@ public class TntBow implements Listener, CommandExecutor, TabCompleter {
             tnt.setFuseTicks(BeastModeData.TNTBowfuseTime);
             tnt.setGlowing(BeastModeData.TNTBowGlowingTnt);
             tnt.setVelocity(new Vector(0,0,0));
+            tnt.setYield(BeastModeData.TNTBowExplosionPower);
         }
 
     }
