@@ -3,16 +3,19 @@ package me.thegreenman.beastmode.commands;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import me.thegreenman.beastmode.PlayerData;
@@ -23,13 +26,13 @@ import java.util.UUID;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
 
-public class StatsMenu implements CommandExecutor, TabCompleter {
+public class StatsMenu implements CommandExecutor, TabCompleter, Listener {
 
     public static void openMenu(Player player, UUID findedPlayerUUID) {
-        if (!getOfflinePlayer(findedPlayerUUID).hasPlayedBefore()) {
-            player.sendMessage("That player has not played before");
-            return;
-        }
+//        if (PlayerData.playerDataConfig.getKeys(false).contains(findedPlayerUUID.toString())) {
+//            player.sendMessage("That player has not played before");
+//            return;
+//        }
         /*
           Kills:
     name:
@@ -45,17 +48,19 @@ public class StatsMenu implements CommandExecutor, TabCompleter {
     lore:
          */
 
-        Inventory meny = Bukkit.createInventory(player, 9, Component.text(getOfflinePlayer(findedPlayerUUID).getName() + " Stats"));
+        Inventory meny = Bukkit.createInventory(player, 9, Component.text(PlayerData.playerDataConfig.getString(findedPlayerUUID + ".latestName") + " Stats"));
         PlayerData playerData = PlayerData.getPlayerData(findedPlayerUUID);
+
 
         ItemStack diaSword = new ItemStack(Material.DIAMOND_SWORD);
         ItemMeta diaSwordMeta = diaSword.getItemMeta();
 
         diaSwordMeta.itemName(Component.text("Totala dödande"));
-        diaSwordMeta.lore(List.of(Component.text("<player> totala dödande <amount>".replace("<player>", getOfflinePlayer(findedPlayerUUID).getName()).replace("<amount>", String.valueOf(playerData.getTotalKills())))));
+        diaSwordMeta.lore(List.of(Component.text("§7<player> totala dödande <amount>".replace("<player>", getOfflinePlayer(findedPlayerUUID).getName()).replace("<amount>", String.valueOf(playerData.getTotalKills())))));
 
         diaSword.setItemMeta(diaSwordMeta);
         meny.setItem(2, diaSword);
+
 
         ItemStack games = new ItemStack(Material.TRIAL_KEY);
         ItemMeta gamesMeta = games.getItemMeta();
@@ -63,23 +68,34 @@ public class StatsMenu implements CommandExecutor, TabCompleter {
         gamesMeta.itemName(Component.text("Totalt spel"));
         gamesMeta.lore(
                 List.of(
-                        Component.text("<player> totala spelade <amount> matcher".replace("<player>", getOfflinePlayer(findedPlayerUUID).getName()).replace("<amount>", String.valueOf(playerData.getTotalGames())))
+                        Component.text("§7<player> totala spelade <amount> matcher".replace("<player>", getOfflinePlayer(findedPlayerUUID).getName()).replace("<amount>", String.valueOf(playerData.getTotalGames())))
                 ));
 
         games.setItemMeta(gamesMeta);
         meny.setItem(3, games);
 
-//        ItemStack wins = new ItemStack(Material.DIAMOND_BLOCK);
-//        ItemMeta winsMeta = wins.getItemMeta();
-//
-//        winsMeta.setItemName(lang.getString("stats.Wins.name"));
-//        winsMeta.setLore(
-//                List.of(
-//                        ChatColor.GRAY + lang.getString("stats.Wins.lore").replace("<player>", getOfflinePlayer(findedPlayerUUID).getName()).replace("<amount>", String.valueOf(playerData.getTotalWins()))
-//                ));
-//
-//        wins.setItemMeta(winsMeta);
-//        meny.setItem(5, wins);
+
+        ItemStack HitRate = new ItemStack(Material.BOW);
+        ItemMeta HitRateMeta = HitRate.getItemMeta();
+
+        HitRateMeta.itemName(Component.text("Total speltid"));
+        List<Component> HitRateLore = new ArrayList<>();
+
+        if (playerData.getTotalShotArrows() != 0.0) {
+            double rate = (double) playerData.getArrowsHit() / playerData.getTotalShotArrows() * 100.0;
+            rate = Math.round(rate);
+            HitRateLore.add(Component.text("§r§7Bow Hit rate: " + rate + "%"));
+        }
+        else {
+            HitRateLore.add(Component.text("§r§7Bow Hit rate: 0%"));
+        }
+        HitRateLore.add(Component.text("§r§7Total arrows shot: " + playerData.getTotalShotArrows()));
+        HitRateLore.add(Component.text("§r§7Total arrows hit: " + playerData.getArrowsHit()));
+
+        HitRateMeta.lore(HitRateLore);
+        HitRate.setItemMeta(HitRateMeta);
+        meny.setItem(5, HitRate);
+
 
         ItemStack PlayTime = new ItemStack(Material.CLOCK);
         ItemMeta PlayTimeMeta = PlayTime.getItemMeta();
@@ -87,7 +103,7 @@ public class StatsMenu implements CommandExecutor, TabCompleter {
         PlayTimeMeta.itemName(Component.text("Total speltid"));
         PlayTimeMeta.lore(
                 List.of(
-                        Component.text("<player> totala speltid <amount>"
+                        Component.text("§7<player> totala speltid <amount>"
                                 .replace("<player>", getOfflinePlayer(findedPlayerUUID).getName())
                                 .replace("<amount>", formatPlayTime(getOfflinePlayer(findedPlayerUUID).getStatistic(Statistic.PLAY_ONE_MINUTE))))
                 ));
@@ -118,11 +134,15 @@ public class StatsMenu implements CommandExecutor, TabCompleter {
         if (args.length == 0) {
             openMenu(player, player.getUniqueId());
         }
-        else if (Bukkit.getOfflinePlayer(args[0]).hasPlayedBefore()) {
-            openMenu(player, Bukkit.getOfflinePlayer(args[0]).getUniqueId());
-        }
         else {
-            player.sendMessage(args[0]);
+            for (String uuid : PlayerData.playerDataConfig.getKeys(false)) {
+                String name = PlayerData.playerDataConfig.getString(uuid + ".latestName");
+
+                if (name != null && !name.isEmpty() && name.equals(args[0])) {
+                    openMenu(player, UUID.fromString(uuid));
+                    break;
+                }
+            }
         }
 
 
@@ -132,10 +152,28 @@ public class StatsMenu implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        List<String> playername = new ArrayList<>();
-        for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-            playername.add(offlinePlayer.getName());
+        return getAllPlayers();
+    }
+
+    private List<String> getAllPlayers() {
+        List<String> playernames = new ArrayList<>();
+
+        for (String uuid : PlayerData.playerDataConfig.getKeys(false)) {
+            String name = PlayerData.playerDataConfig.getString(uuid + ".latestName");
+
+            if (name != null && !name.isEmpty()) {
+                playernames.add(name);
+            }
         }
-        return playername;
+
+        return playernames;
+    }
+
+    @EventHandler
+    public void onInventoryClickEvent(InventoryClickEvent event) {
+        if (event.getView().title().toString().endsWith(" Stats")) {
+            event.setCancelled(true);
+            return;
+        }
     }
 }

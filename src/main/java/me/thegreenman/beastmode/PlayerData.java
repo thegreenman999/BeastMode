@@ -19,8 +19,9 @@ public class PlayerData {
     public static YamlConfiguration playerDataConfig;
 
     private int totalKills;
-    private int totalWins;
     private int totalGames;
+    private int totalShotArrows;
+    private int arrowsHit;
 
     private final UUID uuid;
 
@@ -39,9 +40,11 @@ public class PlayerData {
 
     public void saveData() {
         try {
-            playerDataConfig.set(uuid.toString() + ".totalKills", totalKills);
-            playerDataConfig.set(uuid.toString() + ".totalGames", totalGames);
-            playerDataConfig.set(uuid.toString() + ".latestName", Bukkit.getOfflinePlayer(uuid).getName());
+            playerDataConfig.set(uuid + ".totalKills", totalKills);
+            playerDataConfig.set(uuid + ".totalGames", totalGames);
+            playerDataConfig.set(uuid + ".totalShotArrows", totalShotArrows);
+            playerDataConfig.set(uuid + ".arrowsHit", arrowsHit);
+            playerDataConfig.set(uuid + ".latestName", Bukkit.getOfflinePlayer(uuid).getName());
         }
         catch (Exception e) {
             Main.severe("Error saving data for " + uuid.toString());
@@ -51,18 +54,21 @@ public class PlayerData {
     }
 
     public void loadData() {
-        if (playerDataConfig.getConfigurationSection(uuid.toString()) == null) {
+        if (playerDataConfig.getConfigurationSection(uuid.toString()) == null || playerDataConfig.getConfigurationSection(uuid.toString()).getKeys(false).isEmpty()) {
             totalKills = 0;
-            totalWins = 0;
             totalGames = 0;
+            totalShotArrows = 0;
+            arrowsHit = 0;
 
             saveData();
             playerDataList.add(this);
         }
         else {
             try {
-                totalKills = playerDataConfig.getInt(uuid.toString() + ".totalKills");
-                totalGames = playerDataConfig.getInt(uuid.toString() + ".totalGames");
+                totalKills = playerDataConfig.getInt(uuid + ".totalKills");
+                totalGames = playerDataConfig.getInt(uuid + ".totalGames");
+                totalShotArrows = playerDataConfig.getInt(uuid + ".totalShotArrows");
+                arrowsHit = playerDataConfig.getInt(uuid + ".arrowsHit");
             }
             catch (Exception e) {
                 Main.severe("Error Loading data for " + uuid.toString());
@@ -84,6 +90,22 @@ public class PlayerData {
 
     public void addTotalGames() {
         this.totalGames++;
+    }
+
+    public int getTotalShotArrows() {
+        return totalShotArrows;
+    }
+
+    public void addTotalShotArrows() {
+        this.totalShotArrows++;
+    }
+
+    public int getArrowsHit() {
+        return arrowsHit;
+    }
+
+    public void addArrowsHit() {
+        this.arrowsHit++;
     }
 
     public static PlayerData getPlayerData(UUID playerUUID) {
