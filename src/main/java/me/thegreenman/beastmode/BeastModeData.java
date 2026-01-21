@@ -21,8 +21,9 @@ public class BeastModeData {
     /////////// MAPS ////////////////
     public static int selectedMapindex = 0;
     public static List<String> Maps = List.of(
-            "Original map",
-            "Kluddis castle"
+            "Original Map",
+            "Kluddis Castle",
+            "Sillens Place"
     );
 
     public static void loadVanillaMap() {
@@ -67,6 +68,47 @@ public class BeastModeData {
 
     }
 
+    public static void loadSillenMap() {
+        villagerBowLocation = new Location[]{
+                new Location(WORLD, -1034.5, -57, -74.5, 0, 14), // GRÃ–N
+                new Location(WORLD, -1071.5, -57, -25.5, 90, 14), // RÃ–D
+                new Location(WORLD, -1083.5, -57, -111.5, -90, 14), // BLÃ…
+                new Location(WORLD, -1120.5, -57, -62.5, -180, 14) // ROSA
+        };
+        villagerSwordLocation = new Location[]{
+                new Location(WORLD, -1031.5, -57, -71.5, 90, 14), // GRÃ–N
+                new Location(WORLD, -1074.5, -57, -22.5, -180, 14), // RÃ–D
+                new Location(WORLD, -1080.5, -57, -114.5, 0, 14), // BLÃ…
+                new Location(WORLD, -1123.5, -57, -65.5, -90, 14) // ROSA
+        };
+        villagerArmorLocation = new Location[]{
+                new Location(WORLD, -1031.5, -57, -69.5, 90, 14), // GRÃ–N
+                new Location(WORLD, -1076.5, -57, -22.5, -180, 14), // RÃ–D
+                new Location(WORLD, -1078.5, -57, -114.5, 0, 14), // BLÃ…
+                new Location(WORLD, -1123.5, -57, -67.5, -90, 14) // ROSA
+        };
+        villagerFoodLocation = new Location[]{
+                new Location(WORLD, -1031.5, -57, -67.5, 90, 14), // GRÃ–N
+                new Location(WORLD, -1078.5, -57, -22.5, -180, 14), // RÃ–D
+                new Location(WORLD, -1076.5, -57, -114.5, 0, 14), // BLÃ…
+                new Location(WORLD, -1123.5, -57, -69.5, -90, 14) // ROSA
+        };
+        villagerBlocksLocation = new Location[]{
+                new Location(WORLD, -1031.5, -57, -65.5, 90, 14), // GRÃ–N
+                new Location(WORLD, -1080.5, -57, -22.5, -180, 14), // RÃ–D
+                new Location(WORLD, -1074.5, -57, -114.5, 0, 14), // BLÃ…
+                new Location(WORLD, -1123.5, -57, -71.5, -90, 14) // ROSA
+        };
+        villagerPotionLocation = new Location[]{
+                new Location(WORLD, -1034.5, -57, -62.5, -180, 14), // GRÃ–N
+                new Location(WORLD, -1083.5, -57, -25.5, -90, 14), // RÃ–D
+                new Location(WORLD, -1071.5, -57, -111.5, 90, 14), // BLÃ…
+                new Location(WORLD, -1120.5, -57, -74.5, 0, 14) // ROSA
+        };
+
+        villagerMiddleLocation = new Location (WORLD, -1077.5, -60.5, -68.5, 0, -90);
+    }
+
     public static Location[] villagerBowLocation = new Location[]{
             new Location(WORLD, 53.5, 92, 283.5, 90, 14), // GRÖN
             new Location(WORLD, 11.5, 80, 225.5, 0, 14), // RÖD
@@ -106,20 +148,24 @@ public class BeastModeData {
     public static Location villagerMiddleLocation = new Location(WORLD, 51.5, 115, 229.5);
 
     public static Location[] greenTeamSpawn = new Location[]{
-        new Location(WORLD, 59.5, 52, -1.5, 90, 14), // vanilla Map
-        new Location(WORLD, 48, 92, 289, 90, 14) // kluddes map
+            new Location(WORLD, 59.5, 52, -1.5, 90, 14), // vanilla Map
+            new Location(WORLD, 48, 92, 289, 90, 14), // kluddes map
+            new Location(WORLD, -1035, -57, -69, 90, 14) // sillens map
     };
     public static Location[] pinkTeamSpawn = new Location[]{
             new Location(WORLD, -1.5, 52, 59.5, 180, 14), // vanilla Map
-            new Location(WORLD, 59, 75, 177, 180, 14) // kluddes map
+            new Location(WORLD, 59, 75, 177, 180, 14), // kluddes map
+            new Location(WORLD, -1120.5, -57, -68.5, -90, 14) // sillens map
     };
     public static Location[] blueTeamSpawn = new Location[]{
             new Location(WORLD, -62.5, 52, -1.5, -90, 14), // vanilla Map
-            new Location(WORLD, 75, 80, 236, -90, 14) // kluddes map
+            new Location(WORLD, 75, 80, 236, -90, 14), // kluddes map
+            new Location(WORLD, -1077.5, -57, -111.5, 0, 14) // sillens map
     };
     public static Location[] redTeamSpawn = new Location[]{
             new Location(WORLD, -1.5, 52, -62.5, 0, 14), // vanilla Map
-            new Location(WORLD, 19, 80, 227, 0, 14) // kluddes map
+            new Location(WORLD, 19, 80, 227, 0, 14), // kluddes map
+            new Location(WORLD, -1077.5, -57, -25.5, 180, 14) // sillens map
     };
 
 
@@ -179,6 +225,19 @@ public class BeastModeData {
     public static boolean TNTBowGlowingTnt = false;
     public static float TNTBowMaxDamage = 10.0f;
     public static boolean TNTBowKeepOnDeath = false;
+
+    // TODO: Minken, fixa! :] Kan fixa fler: TNTEggBowDelay, TNTEggBowAmount(ofChickens), ...
+    // DorkMenu Settings whatever den nu heter
+    public static boolean dorkMode = false;
+    public static boolean useInvisibilityCloak = true;
+    public static boolean useTNTBow = true;
+    public static boolean useTNTEggBow = true;
+    public static boolean usePunishSneaking = true;
+    public static boolean useMegaMiningPickaxe = true;
+    public static boolean useSticks = true;
+    // TRASIGA, INAKTIVERADE:
+    public static boolean useWoolGameBoots = false;
+    public static boolean useNPCs = false;
 
 
 }

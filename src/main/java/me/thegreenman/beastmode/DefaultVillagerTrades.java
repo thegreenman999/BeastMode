@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import me.thegreenman.Main;
 
-public class DefaultVillagerTrades extends villagersTrades {
+public class DefaultVillagerTrades extends VillagersTrades {
 //	public static ItemStack tackGronis = new ItemStack(Material.POTION);
 	
 //	public static ItemStack speed2 = new ItemStack(Material.POTION);

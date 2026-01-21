@@ -62,10 +62,6 @@ public class StartGame {
             spelareonline.getInventory().setItemInOffHand(null);
             spelareonline.getInventory().clear();
 
-            if (TntBow.autoGiveBow.contains(spelareonline)) {
-                spelareonline.getInventory().addItem(TntBow.TNTBOW);
-            }
-
         }
 
 
@@ -89,13 +85,15 @@ public class StartGame {
             }
         }.runTaskLater(plugin, 10); // 60
 
+
+        // Load Map
         if (BeastModeData.selectedMapindex == 0) {
             BeastModeData.loadVanillaMap();
-            new ItemRepeatSpawning(true);
         }
-        else {
-            new ItemRepeatSpawning(false);
+        else if (BeastModeData.selectedMapindex == 2) {
+            BeastModeData.loadSillenMap();
         }
+        new ItemRepeatSpawning();
 
         // BeastModeData.minkenEditionThusFalseIsOriginalRules TRUE or FALSE
         if (BeastModeData.minkenEditionThusFalseIsOriginalRules) {
@@ -164,6 +162,10 @@ public class StartGame {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (blueTeam.contains(player) || redTeam.contains(player) || greenTeam.contains(player) || pinkTeam.contains(player)) {
                 player.setGameMode(GameMode.SURVIVAL);
+                if (TntBow.autoGiveBow.contains(player)) {
+                    player.getInventory().addItem(TntBow.TNTBOW);
+                }
+                PlayerData.getPlayerData(player.getUniqueId()).addTotalGames();
             }
             else {
                 player.setGameMode(GameMode.SPECTATOR);

@@ -16,9 +16,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import me.thegreenman.Main;
 import me.thegreenman.beastmode.BeastModeData;
-import me.thegreenman.beastmode.villagersTrades;
+import me.thegreenman.beastmode.VillagersTrades;
 
-public class CustomVillagerTrades extends villagersTrades {
+public class CustomVillagerTrades extends VillagersTrades {
     public static ItemStack jump = new ItemStack(Material.POTION);
     
 	//	Color leatherColor = Color.BLACK;

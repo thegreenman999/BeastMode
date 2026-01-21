@@ -1,10 +1,13 @@
 package me.thegreenman;
 
+import io.papermc.paper.connection.PlayerLoginConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.World;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import me.thegreenman.beastmode.EventListenersFromOtherClasses;
@@ -99,7 +102,7 @@ public class Main extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(new PreventGreif(), this);
 		getServer().getPluginManager().registerEvents(new RemoveMetaOnItems(), this);
 		getServer().getPluginManager().registerEvents(new FireResistanceOnDiamonds(), this);
-        getServer().getPluginManager().registerEvents(new PlayerDataHandler(), this);
+
 
 		// CLOAK
 		InvisibilityDye cloakkommandot = new InvisibilityDye();
@@ -118,6 +121,7 @@ public class Main extends JavaPlugin implements Listener {
 
         StatsMenu stats = new StatsMenu();
         getCommand("stats").setExecutor(stats);
+        getServer().getPluginManager().registerEvents(new PlayerDataHandler(), this);
 
 
 
@@ -152,7 +156,7 @@ public class Main extends JavaPlugin implements Listener {
 	public void onDisable() {
 //		saveChestFile();
 		log("MinkensPVPBeastMode Disabled!");
-
+        PlayerData.saveAll();
 
 	}
 

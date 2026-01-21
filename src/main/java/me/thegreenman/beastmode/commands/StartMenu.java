@@ -34,7 +34,8 @@ public class StartMenu implements CommandExecutor, Listener {
 	private static final String BeastmodeMenu = ChatColor.LIGHT_PURPLE + "Beast" + ChatColor.GOLD + "Mode" + ChatColor.AQUA + "Menu";
     private static final Component BeastmodeGameRuleMenu = Component.text("§dBeast§6Mode§bMenu §cGameRules");
     private static final Component BeastmodeTNTbowMenu = Component.text("§dBeast§6Mode §4T§cN§4T§rBow §bMenu");
-	public static boolean menuRunner = false;
+    private static final Component BeastmodeDorkMenu = Component.text("Â§dBeastÂ§6Mode Â§4DÂ§cOÂ§4RÂ§cK Â§bMenu");
+    public static boolean menuRunner = false;
 
 
     Location spakloc = null;
@@ -47,7 +48,7 @@ public class StartMenu implements CommandExecutor, Listener {
 		if (meta != null) {
 			meta.setItemName("StartBow");
 			meta.addEnchant(Enchantment.INFINITY, 1, false);
-			//			meta.setLore((Arrays.asList("Smock", "", "")));
+			//meta.setLore((Arrays.asList("Smock", "", "")));
 			this.setItemMeta(meta);
 		}
 	}};
@@ -81,6 +82,13 @@ public class StartMenu implements CommandExecutor, Listener {
 
         meta.itemName(Component.text("TNT Bow settings"));
         meta.lore(List.of(Component.text("§7Click to Change")));
+        this.setItemMeta(meta);
+    }};
+
+    private static final ItemStack dorkMenu = new ItemStack(Material.DRAGON_EGG) {{
+        ItemMeta meta = this.getItemMeta();
+        meta.itemName(Component.text("Dork settings"));
+        meta.lore(List.of(Component.text("Â§7Click to Change")));
         this.setItemMeta(meta);
     }};
 
@@ -152,8 +160,12 @@ public class StartMenu implements CommandExecutor, Listener {
         menu.setItem(28, uppdateGlowItem());
         menu.setItem(29, GameRuleItem);
         menu.setItem(30, TNTBow);
-
-
+        // 31
+        menu.setItem(32, createToggleItem("DorkMode", Material.DEAD_BUSH, BeastModeData.dorkMode));
+        if (BeastModeData.dorkMode) {
+            menu.setItem(33, dorkMenu);
+        }
+        // ...
 		menu.setItem(44, startGame);
 
 		player.openInventory(menu);
@@ -179,7 +191,6 @@ public class StartMenu implements CommandExecutor, Listener {
     public static void openTNTBow(Player player) {
         Inventory menu = Bukkit.createInventory(player, 9, BeastmodeTNTbowMenu);
 
-
         menu.setItem(0, createValueItem("Explosion Power", Material.TNT, BeastModeData.TNTBowExplosionPower));
         menu.setItem(1, createValueItem("Fuse Time", Material.GUNPOWDER, BeastModeData.TNTBowfuseTime));
         menu.setItem(2, createValueItem("Cooldown", Material.CLOCK, BeastModeData.TNTBowCoolDown));
@@ -191,6 +202,27 @@ public class StartMenu implements CommandExecutor, Listener {
         player.openInventory(menu);
     }
 
+    public static void openDorkMenu(Player player) {
+        Inventory menu = Bukkit.createInventory(player, 9, BeastmodeDorkMenu);
+        // InvisDye - gives on death
+        // TNTBow
+        // TNTEggBow
+        // PunishSneaking
+        // MegaMiningPickaxe
+        // Sticks
+        // WoolGameBoots
+        // NPCs2026
+        menu.setItem(0, createToggleItem("Invisibility Cloak", Material.WHITE_DYE, BeastModeData.useInvisibilityCloak));
+        menu.setItem(1, createToggleItem("TNT Bow", Material.TNT, BeastModeData.useTNTBow));
+        menu.setItem(2, createToggleItem("TNT Egg Bow", Material.EGG, BeastModeData.useTNTEggBow));
+        menu.setItem(3, createToggleItem("Punish Sneaking", Material.CHAINMAIL_BOOTS, BeastModeData.usePunishSneaking));
+        menu.setItem(4, createToggleItem("MegaMiningPickaxe", Material.WOODEN_PICKAXE, BeastModeData.useMegaMiningPickaxe));
+        menu.setItem(5, createToggleItem("Sticks", Material.STICK, BeastModeData.useSticks));
+        menu.setItem(6, createToggleItem("WoolGameBoots (disabled)", Material.PINK_WOOL, BeastModeData.useWoolGameBoots));
+        menu.setItem(7, createToggleItem("NPCs2026 (disabled)", Material.VILLAGER_SPAWN_EGG, BeastModeData.useNPCs));
+        menu.setItem(8, back);
+        player.openInventory(menu);
+    }
 
 
     public static ItemStack createToggleItem(String name, Material material, boolean state) {
@@ -204,6 +236,7 @@ public class StartMenu implements CommandExecutor, Listener {
 		item.setItemMeta(meta);
 		return item;
 	}
+
     public static ItemStack createToggleItem(Component name, Material material, boolean state) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
@@ -227,6 +260,7 @@ public class StartMenu implements CommandExecutor, Listener {
 		item.setItemMeta(meta);
 		return item;
 	}
+
     public static ItemStack createValueItem(String name, Material material, float value) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
@@ -257,7 +291,7 @@ public class StartMenu implements CommandExecutor, Listener {
 	public void onInventoryClick(InventoryClickEvent event) {
 		if (!(event.getWhoClicked() instanceof Player player)) return;
 
-        if (!event.getView().getTitle().equals(BeastmodeMenu) && !event.getView().title().equals(BeastmodeGameRuleMenu) && !event.getView().title().equals(BeastmodeTNTbowMenu)) return;
+        if (!event.getView().getTitle().equals(BeastmodeMenu) && !event.getView().title().equals(BeastmodeGameRuleMenu) && !event.getView().title().equals(BeastmodeTNTbowMenu) && !event.getView().title().equals(BeastmodeDorkMenu)) return;
 
 		event.setCancelled(true);
 		ItemStack clicked = event.getCurrentItem();
@@ -350,6 +384,40 @@ public class StartMenu implements CommandExecutor, Listener {
             case "Glow after":
                 cycleGlowTime();
                 break;
+            // DorkMenu :)
+            case "Dork settings":
+                player.closeInventory();
+                openDorkMenu(player);
+                return;
+
+            // Dork settings
+            case "DorkMode":
+                BeastModeData.dorkMode = !BeastModeData.dorkMode;
+                break;
+            case "Invisibility Cloak":
+                BeastModeData.useInvisibilityCloak = !BeastModeData.useInvisibilityCloak;
+                break;
+            case "TNT Bow":
+                BeastModeData.useTNTBow = !BeastModeData.useTNTBow;
+                break;
+            case "TNT Egg Bow":
+                BeastModeData.useTNTEggBow = !BeastModeData.useTNTEggBow;
+                break;
+            case "Punish Sneaking":
+                BeastModeData.usePunishSneaking = !BeastModeData.usePunishSneaking;
+                break;
+            case "MegaMiningPickaxe":
+                BeastModeData.useMegaMiningPickaxe = !BeastModeData.useMegaMiningPickaxe;
+                break;
+            case "Sticks":
+                BeastModeData.useSticks = !BeastModeData.useSticks;
+                break;
+            case "WoolGameBoots (disabled)":
+                // BeastModeData.useWoolGameBoots = !BeastModeData.useWoolGameBoots;
+                break;
+            case "NPCs2026 (disabled)":
+                // BeastModeData.useNPCs = !BeastModeData.useNPCs;
+                break;
 
             // GameRules
             case "§fGameRule":
@@ -406,6 +474,9 @@ public class StartMenu implements CommandExecutor, Listener {
         }
         else if (event.getView().title().equals(BeastmodeGameRuleMenu)) {
             openGameRuleMenu(player);
+        }
+        else if (event.getView().title().equals(BeastmodeDorkMenu)) {
+            openDorkMenu(player);
         }
         else {
             openAdminMenu(player); // Refresh menu unless "Start Game" is clicked
@@ -661,7 +732,7 @@ public class StartMenu implements CommandExecutor, Listener {
 				//				player.getInventory().addItem(bow);
 				//				player.getInventory().addItem(new ItemStack(Material.ARROW, 1));
 				//				player.getInventory().addItem(new ItemStack(Material.PINK_WOOL, 48));
-//				player.getInventory().addItem(new ItemStack(Material.DIRT, 1));
+                //				player.getInventory().addItem(new ItemStack(Material.DIRT, 1));
 
                 if (BeastModeData.glowEnabled) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1));

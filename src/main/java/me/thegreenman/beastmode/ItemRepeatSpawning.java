@@ -23,26 +23,38 @@ public class ItemRepeatSpawning implements Listener {
 	public Location pinkItemSpawnLoc = null;
 	public Location middleItemSpawnLoc = null;
 
-	public ItemRepeatSpawning(boolean vanilaMap) {
-		// Fördröjning för att säkerställa att världen är laddad
-        if (!vanilaMap) {
+	public ItemRepeatSpawning() {
+
+        // FÃ¶rdrÃ¶jning fÃ¶r att sÃ¤kerstÃ¤lla att vÃ¤rlden Ã¤r laddad
+        if (BeastModeData.selectedMapindex == 0) {
             Bukkit.getScheduler().runTaskLater(Main.plugin, this::startSpawnBricks, 20L);
             Bukkit.getScheduler().runTaskLater(Main.plugin, this::startSpawnIron, 20L);
             Bukkit.getScheduler().runTaskLater(Main.plugin, this::startSpawnGold, 20L);
             Bukkit.getScheduler().runTaskLater(Main.plugin, this::startSpawnGoldInTheMiddle, 20L);
             Bukkit.getScheduler().runTaskLater(Main.plugin, this::startSpawnDiamondInTheMiddle, 20L);
 
-
             blueItemSpawnLoc = new Location(Main.WORLD, 74.5, 75.5, 225.5); // BLUE?
-            redItemSpawnLoc = new Location(Main.WORLD, 7.5, 80.5, 227.5); // RÖD?
-            greenItemSpawnLoc = new Location(Main.WORLD, 53.5, 92.5, 289.5); // GRÖN?
+            redItemSpawnLoc = new Location(Main.WORLD, 7.5, 80.5, 227.5); // RÃ–D?
+            greenItemSpawnLoc = new Location(Main.WORLD, 53.5, 92.5, 289.5); // GRÃ–N?
             pinkItemSpawnLoc = new Location(Main.WORLD, 46.5, 75.5, 180.5); // PINK?
             middleItemSpawnLoc = new Location(Main.WORLD, 49.5, 122, 229.5); // mitten
         }
-        else {
+        else if (BeastModeData.selectedMapindex == 1) {
             Bukkit.getScheduler().runTaskLater(Main.plugin, this::startSpawnDiamondInTheMiddle, 20L);
             middleItemSpawnLoc = new Location(Main.WORLD, -2.5, 45, -2.5); // mitten
+        }
+        else if (BeastModeData.selectedMapindex == 2) {
+            Bukkit.getScheduler().runTaskLater(Main.plugin, this::startSpawnBricks, 20L);
+            Bukkit.getScheduler().runTaskLater(Main.plugin, this::startSpawnIron, 20L);
+            Bukkit.getScheduler().runTaskLater(Main.plugin, this::startSpawnGold, 20L);
+            Bukkit.getScheduler().runTaskLater(Main.plugin, this::startSpawnGoldInTheMiddle, 20L);
+            Bukkit.getScheduler().runTaskLater(Main.plugin, this::startSpawnDiamondInTheMiddle, 20L);
 
+            blueItemSpawnLoc = new Location(Main.WORLD, -1077.5, -56, -111.5); // BLUE?
+            redItemSpawnLoc = new Location(Main.WORLD, -1077.5, -56, -25.5); // RÃ–D?
+            greenItemSpawnLoc = new Location(Main.WORLD, -1034.5, -56, -68.5); // GRÃ–N?
+            pinkItemSpawnLoc = new Location(Main.WORLD, -1120.5, -56, -68.5); // PINK?
+            middleItemSpawnLoc = new Location(Main.WORLD, -1077.5, -56, -68.5); // mitten
         }
 
 	}
