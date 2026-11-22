@@ -1,5 +1,7 @@
 package me.thegreenman.beastmode;
 
+import me.thegreenman.beastmode.minkenedition.InvisibilityDye;
+import me.thegreenman.beastmode.minkenedition.TNTBowEgg;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static me.thegreenman.Main.*;
+import static me.thegreenman.beastmode.commands.StartMenu.TNTBow;
 
 public class StartGame {
 
@@ -80,8 +83,15 @@ public class StartGame {
                     if (BeastModeData.freeStartBow) { player.getInventory().addItem(StartMenu.startBow); player.getInventory().addItem(new ItemStack(Material.ARROW, 1)); }
                     if (BeastModeData.minkenEditionThusFalseIsOriginalRules) { player.getInventory().addItem(new ItemStack(Material.HOPPER, 1)); player.getInventory().addItem(new ItemStack(Material.CHEST, 1)); }
                     if (BeastModeData.freeStartBlocks) { player.getInventory().addItem(new ItemStack(Material.OAK_LEAVES, 64)); } // 48 räcker // NETHERRACK / PINK_WOOL
-                    //
+                    // DORK SETTINGS
+                    if (!BeastModeData.dorkMode) { return; }
+                    if (BeastModeData.useInvisibilityCloak) { player.getInventory().addItem(InvisibilityDye.invisDye); }
+                    if (BeastModeData.useTNTBow) { player.getInventory().addItem(TNTBow); }
+                    if (BeastModeData.useTNTEggBow) { player.getInventory().addItem(TNTBowEgg.EggBow); }
+                    // Punish Sneaking is not an item. It's a boolean. Thus not checked here.
+                    // if (BeastModeData.useNPCs) { ... hmm... no idea how to code this. /Minken
                 }
+
             }
         }.runTaskLater(plugin, 10); // 60
 

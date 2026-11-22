@@ -77,7 +77,7 @@ public class StartMenu implements CommandExecutor, Listener {
         meta.lore(List.of(Component.text("§7Click to Change")));
         this.setItemMeta(meta);
     }};
-    private static final ItemStack TNTBow = new ItemStack(Material.BOW) {{
+    public static final ItemStack TNTBow = new ItemStack(Material.BOW) {{
         ItemMeta meta = this.getItemMeta();
 
         meta.itemName(Component.text("TNT Bow settings"));
@@ -215,11 +215,7 @@ public class StartMenu implements CommandExecutor, Listener {
         menu.setItem(0, createToggleItem("Invisibility Cloak", Material.WHITE_DYE, BeastModeData.useInvisibilityCloak));
         menu.setItem(1, createToggleItem("TNT Bow", Material.TNT, BeastModeData.useTNTBow));
         menu.setItem(2, createToggleItem("TNT Egg Bow", Material.EGG, BeastModeData.useTNTEggBow));
-        menu.setItem(3, createToggleItem("Punish Sneaking", Material.CHAINMAIL_BOOTS, BeastModeData.usePunishSneaking));
-        menu.setItem(4, createToggleItem("MegaMiningPickaxe", Material.WOODEN_PICKAXE, BeastModeData.useMegaMiningPickaxe));
-        menu.setItem(5, createToggleItem("Sticks", Material.STICK, BeastModeData.useSticks));
-        menu.setItem(6, createToggleItem("WoolGameBoots (disabled)", Material.PINK_WOOL, BeastModeData.useWoolGameBoots));
-        menu.setItem(7, createToggleItem("NPCs2026 (disabled)", Material.VILLAGER_SPAWN_EGG, BeastModeData.useNPCs));
+        menu.setItem(3, createToggleItem("WoolGameBoots (disabled)", Material.PINK_WOOL, BeastModeData.useWoolGameBoots));
         menu.setItem(8, back);
         player.openInventory(menu);
     }
@@ -403,20 +399,8 @@ public class StartMenu implements CommandExecutor, Listener {
             case "TNT Egg Bow":
                 BeastModeData.useTNTEggBow = !BeastModeData.useTNTEggBow;
                 break;
-            case "Punish Sneaking":
-                BeastModeData.usePunishSneaking = !BeastModeData.usePunishSneaking;
-                break;
-            case "MegaMiningPickaxe":
-                BeastModeData.useMegaMiningPickaxe = !BeastModeData.useMegaMiningPickaxe;
-                break;
-            case "Sticks":
-                BeastModeData.useSticks = !BeastModeData.useSticks;
-                break;
             case "WoolGameBoots (disabled)":
                 // BeastModeData.useWoolGameBoots = !BeastModeData.useWoolGameBoots;
-                break;
-            case "NPCs2026 (disabled)":
-                // BeastModeData.useNPCs = !BeastModeData.useNPCs;
                 break;
 
             // GameRules

@@ -1,13 +1,11 @@
 package me.thegreenman;
 
-import io.papermc.paper.connection.PlayerLoginConnection;
+import me.thegreenman.beastmode.minkenedition.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.World;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import me.thegreenman.beastmode.EventListenersFromOtherClasses;
@@ -16,12 +14,7 @@ import me.thegreenman.beastmode.PlayerDataHandler;
 import me.thegreenman.beastmode.commands.MinkenMenu;
 import me.thegreenman.beastmode.commands.StartMenu;
 import me.thegreenman.beastmode.commands.StatsMenu;
-import me.thegreenman.beastmode.commands.fullBright;
-import me.thegreenman.beastmode.minkenedition.PreventGreif;
-import me.thegreenman.beastmode.minkenedition.RemoveMetaOnItems;
-import me.thegreenman.beastmode.minkenedition.ReturnDeathItems;
-import me.thegreenman.beastmode.minkenedition.TntBow;
-import me.thegreenman.beastmode.minkenedition.invisibilitycloak.InvisibilityDye;
+import me.thegreenman.beastmode.commands.FullBright;
 import me.thegreenman.beastmode.testing.FireResistanceOnDiamonds;
 
 /*
@@ -111,7 +104,7 @@ public class Main extends JavaPlugin implements Listener {
 		// END OF CLOAK
 
 
-        fullBright fullBright = new fullBright();
+        FullBright fullBright = new FullBright();
         getCommand("fullbright").setExecutor(fullBright);
         getServer().getPluginManager().registerEvents(fullBright, this);
 
@@ -121,11 +114,22 @@ public class Main extends JavaPlugin implements Listener {
 
         StatsMenu stats = new StatsMenu();
         getCommand("stats").setExecutor(stats);
+		getCommand("stats").setTabCompleter(stats);
+        getServer().getPluginManager().registerEvents(stats, this);
         getServer().getPluginManager().registerEvents(new PlayerDataHandler(), this);
 
+        BridgeEgg bridgeEgg = new BridgeEgg();
+        getCommand("bridgeegg").setExecutor(bridgeEgg);
+        getServer().getPluginManager().registerEvents(bridgeEgg, this);
+
+        getServer().getPluginManager().registerEvents(new TNTBowEgg(), this);
+        getServer().getPluginManager().registerEvents(new FlameBowFire(), this);
+        getServer().getPluginManager().registerEvents(new WoolGameBoots(), this);
+        getServer().getPluginManager().registerEvents(new VoidFix(), this);
 
 
-		new BukkitRunnable() {
+
+        new BukkitRunnable() {
 			@Override
 			public void run() {
 				Main.log("Setting GameRule LOCATOR_BAR to FALSE.");

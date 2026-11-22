@@ -2,6 +2,7 @@ package me.thegreenman.beastmode;
 
 
 import org.bukkit.Bukkit;
+import org.bukkit.Statistic;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import me.thegreenman.Main;
@@ -22,6 +23,7 @@ public class PlayerData {
     private int totalGames;
     private int totalShotArrows;
     private int arrowsHit;
+    private long playtime;
 
     private final UUID uuid;
 
@@ -39,11 +41,13 @@ public class PlayerData {
     }
 
     public void saveData() {
+        playtime += Bukkit.getPlayer(uuid).getStatistic(Statistic.PLAY_ONE_MINUTE);
         try {
             playerDataConfig.set(uuid + ".totalKills", totalKills);
             playerDataConfig.set(uuid + ".totalGames", totalGames);
             playerDataConfig.set(uuid + ".totalShotArrows", totalShotArrows);
             playerDataConfig.set(uuid + ".arrowsHit", arrowsHit);
+            playerDataConfig.set(uuid + ".playtime", playtime);
             playerDataConfig.set(uuid + ".latestName", Bukkit.getOfflinePlayer(uuid).getName());
         }
         catch (Exception e) {
@@ -59,6 +63,7 @@ public class PlayerData {
             totalGames = 0;
             totalShotArrows = 0;
             arrowsHit = 0;
+            playtime = 0;
 
             saveData();
             playerDataList.add(this);
@@ -69,11 +74,16 @@ public class PlayerData {
                 totalGames = playerDataConfig.getInt(uuid + ".totalGames");
                 totalShotArrows = playerDataConfig.getInt(uuid + ".totalShotArrows");
                 arrowsHit = playerDataConfig.getInt(uuid + ".arrowsHit");
+                playtime = playerDataConfig.getLong(uuid + ".playtime");
             }
             catch (Exception e) {
                 Main.severe("Error Loading data for " + uuid.toString());
             }
         }
+    }
+
+    public long getPlaytime() {
+        return playtime;
     }
 
     public int getTotalKills() {

@@ -15,7 +15,7 @@ import me.thegreenman.Main;
 import java.util.ArrayList;
 import java.util.List;
 
-public class fullBright implements CommandExecutor, Listener {
+public class FullBright implements CommandExecutor, Listener {
     public List<Player> fullBrightPlayers = new ArrayList<>();
 
     public PotionEffectType nightvision = PotionEffectType.NIGHT_VISION;

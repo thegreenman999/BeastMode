@@ -1,4 +1,4 @@
-package me.thegreenman.beastmode.minkenedition.invisibilitycloak;
+package me.thegreenman.beastmode.minkenedition;
 
 import java.util.ArrayList;
 import java.util.HashMap;

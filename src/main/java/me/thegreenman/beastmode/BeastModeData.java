@@ -232,12 +232,8 @@ public class BeastModeData {
     public static boolean useInvisibilityCloak = true;
     public static boolean useTNTBow = true;
     public static boolean useTNTEggBow = true;
-    public static boolean usePunishSneaking = true;
-    public static boolean useMegaMiningPickaxe = true;
-    public static boolean useSticks = true;
     // TRASIGA, INAKTIVERADE:
     public static boolean useWoolGameBoots = false;
-    public static boolean useNPCs = false;
 
 
 }

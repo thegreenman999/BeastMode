@@ -78,7 +78,7 @@ public class StatsMenu implements CommandExecutor, TabCompleter, Listener {
         ItemStack HitRate = new ItemStack(Material.BOW);
         ItemMeta HitRateMeta = HitRate.getItemMeta();
 
-        HitRateMeta.itemName(Component.text("Total speltid"));
+        HitRateMeta.itemName(Component.text("Hit rate"));
         List<Component> HitRateLore = new ArrayList<>();
 
         if (playerData.getTotalShotArrows() != 0.0) {
@@ -105,8 +105,8 @@ public class StatsMenu implements CommandExecutor, TabCompleter, Listener {
                 List.of(
                         Component.text("§7<player> totala speltid <amount>"
                                 .replace("<player>", getOfflinePlayer(findedPlayerUUID).getName())
-                                .replace("<amount>", formatPlayTime(getOfflinePlayer(findedPlayerUUID).getStatistic(Statistic.PLAY_ONE_MINUTE))))
-                ));
+                                .replace("<amount>", formatPlayTime(playerData.getPlaytime()))
+                )));
 
         PlayTime.setItemMeta(PlayTimeMeta);
         meny.setItem(6, PlayTime);
@@ -116,7 +116,6 @@ public class StatsMenu implements CommandExecutor, TabCompleter, Listener {
 
     public static String formatPlayTime(long ticks) {
         long seconds = ticks / 20;
-
         long days = seconds / 86400;               // 60 * 60 * 24
         long hours = (seconds % 86400) / 3600;
         long minutes = (seconds % 3600) / 60;
@@ -171,7 +170,7 @@ public class StatsMenu implements CommandExecutor, TabCompleter, Listener {
 
     @EventHandler
     public void onInventoryClickEvent(InventoryClickEvent event) {
-        if (event.getView().title().toString().endsWith(" Stats")) {
+        if (event.getView().getTitle().endsWith(" Stats")) {
             event.setCancelled(true);
             return;
         }
