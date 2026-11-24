@@ -41,7 +41,7 @@ public class PlayerData {
     }
 
     public void saveData() {
-        playtime += Bukkit.getPlayer(uuid).getStatistic(Statistic.PLAY_ONE_MINUTE);
+        playtime += Bukkit.getOfflinePlayer(uuid).getStatistic(Statistic.PLAY_ONE_MINUTE);
         try {
             playerDataConfig.set(uuid + ".totalKills", totalKills);
             playerDataConfig.set(uuid + ".totalGames", totalGames);
